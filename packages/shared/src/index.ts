@@ -13,6 +13,8 @@ export const PublicEnquirySchema = z.object({
 export type PublicEnquiryInput = z.infer<typeof PublicEnquirySchema>;
 
 export const TransactionSchema = z.object({
+  id: z.string().uuid().optional(),
+  org_id: z.string().uuid().optional(),
   business_unit_id: z.string().uuid(),
   type: z.enum(["income", "expense"]),
   category_id: z.string().uuid(),
@@ -21,9 +23,49 @@ export const TransactionSchema = z.object({
   currency: z.string().default("NGN"),
   description: z.string().min(3, "Description is required"),
   transaction_date: z.string(),
-  recorded_by: z.string().uuid(),
+  recorded_by: z.string().uuid().optional().nullable(),
   source: z.enum(["manual", "booking", "order", "sale"]).default("manual"),
   source_ref_id: z.string().uuid().nullable().optional(),
 });
 
 export type TransactionInput = z.infer<typeof TransactionSchema>;
+
+export const EventBookingSchema = z.object({
+  id: z.string().uuid().optional(),
+  business_unit_id: z.string().uuid(),
+  client_name: z.string().min(2, "Client name is required"),
+  client_contact: z.string().min(8, "Client contact is required"),
+  event_date: z.string(),
+  package_id: z.string().uuid().nullable().optional(),
+  hall_name: z.string().min(2, "Hall name is required"),
+  total_quoted: z.number().nonnegative("Total quote must be non-negative"),
+  deposit_amount: z.number().nonnegative("Deposit must be non-negative"),
+  status: z.enum(["inquiry", "confirmed", "completed", "cancelled"]).default("inquiry"),
+});
+
+export type EventBookingInput = z.infer<typeof EventBookingSchema>;
+
+export const EaterySaleSchema = z.object({
+  id: z.string().uuid().optional(),
+  business_unit_id: z.string().uuid(),
+  sale_date: z.string(),
+  total_covers: z.number().int().nonnegative("Total covers must be positive"),
+  total_revenue: z.number().nonnegative("Total revenue must be positive"),
+  recorded_by: z.string().uuid().optional().nullable(),
+});
+
+export type EaterySaleInput = z.infer<typeof EaterySaleSchema>;
+
+export const LaundryOrderSchema = z.object({
+  id: z.string().uuid().optional(),
+  business_unit_id: z.string().uuid(),
+  customer_name: z.string().min(2, "Customer name is required"),
+  customer_contact: z.string().min(8, "Customer contact is required"),
+  items_description: z.string().min(3, "Description is required"),
+  drop_off_date: z.string(),
+  pickup_date: z.string().optional().nullable(),
+  status: z.enum(["received", "in_progress", "ready", "collected"]).default("received"),
+  amount_charged: z.number().nonnegative("Amount must be positive"),
+});
+
+export type LaundryOrderInput = z.infer<typeof LaundryOrderSchema>;
