@@ -109,11 +109,11 @@ This indicates a frontend/application-heavy codebase with meaningful procedural 
 ```mermaid
 flowchart LR
     A[User Browser] --> B[apps/web - Next.js]
-    B --> C[@iroko-court/shared]
-    B --> D[@iroko-court/ui]
+    B --> C[iroko-court/shared]
+    B --> D[iroko-court/ui]
     B --> E[Supabase APIs]
-    F[@iroko-court/database] --> E
-    G[@iroko-court/config] --> B
+    F[iroko-court/database] --> E
+    G[iroko-court/config] --> B
     G --> C
     G --> D
 ```
