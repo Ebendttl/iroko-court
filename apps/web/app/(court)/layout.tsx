@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Sparkles, Utensils, Shirt, Info, Menu, X, ArrowRight } from "lucide-react";
@@ -7,6 +9,8 @@ export default function CourtLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-brand-cream text-brand-charcoal selection:bg-brand-forest selection:text-white">
       {/* HEADER */}
@@ -45,23 +49,68 @@ export default function CourtLayout({
             </Link>
           </nav>
 
-          {/* CTA Buttons */}
-          <div className="flex items-center space-x-4">
+          {/* CTA Button & Hamburger */}
+          <div className="flex items-center space-x-3">
             <Link 
               href="/contact" 
-              className="hidden lg:inline-flex items-center justify-center px-4 h-10 rounded-md bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest-light transition-all shadow hover:shadow-md"
+              className="inline-flex items-center justify-center px-4 h-10 rounded-md bg-brand-forest text-brand-cream text-xs font-semibold hover:bg-brand-forest-light transition-all shadow hover:shadow-md"
             >
               Book / Schedule
             </Link>
-            <Link 
-              href="/nexus" 
-              className="inline-flex items-center justify-center px-4 h-10 rounded-md bg-white border border-brand-forest text-brand-forest text-xs font-semibold hover:bg-brand-forest hover:text-white transition-all shadow-sm hover:shadow"
+            
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-md text-brand-forest hover:bg-brand-forest/10 focus:outline-none"
+              aria-label="Toggle menu"
             >
-              Enter Nexus Dashboard
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-            </Link>
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-brand-forest/10 bg-brand-cream/95 backdrop-blur-md px-4 pt-4 pb-6 space-y-3 shadow-lg">
+            <Link 
+              href="/" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-medium text-brand-forest hover:bg-brand-forest/5"
+            >
+              Home
+            </Link>
+            <Link 
+              href="/hall" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-brand-forest hover:bg-brand-forest/5"
+            >
+              <Sparkles className="w-4 h-4 text-brand-gold" />
+              <span>The Hall</span>
+            </Link>
+            <Link 
+              href="/table" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-brand-forest hover:bg-brand-forest/5"
+            >
+              <Utensils className="w-4 h-4 text-brand-terracotta" />
+              <span>The Table</span>
+            </Link>
+            <Link 
+              href="/press" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-brand-forest hover:bg-brand-forest/5"
+            >
+              <Shirt className="w-4 h-4 text-brand-slate" />
+              <span>The Press</span>
+            </Link>
+            <Link 
+              href="/contact" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-medium text-brand-forest hover:bg-brand-forest/5"
+            >
+              Enquiries
+            </Link>
+          </div>
+        )}
       </header>
 
       {/* MAIN CONTENT */}
@@ -122,9 +171,6 @@ export default function CourtLayout({
               <ul className="space-y-4 text-sm">
                 <li>
                   <Link href="/contact" className="hover:text-white transition-colors">Submit an Enquiry</Link>
-                </li>
-                <li>
-                  <Link href="/nexus" className="hover:text-white transition-colors">Operations (Canopy Nexus)</Link>
                 </li>
                 <li>
                   <span className="text-brand-cream/40">Privacy Policy</span>
