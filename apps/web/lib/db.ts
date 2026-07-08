@@ -232,7 +232,7 @@ const SEED_COMING_SOON_UNITS = [
     name: "The Yard",
     description: "Premium eco-friendly car wash and professional detailing, keeping your vehicle pristine while you dine at The Table.",
     icon: "car",
-    image_url: "https://images.unsplash.com/photo-1601362840469-51e4d8d59085?auto=format&fit=crop&q=80&w=800",
+    image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
     expected_launch_label: "Q3 2026",
     is_active: true
   },
@@ -546,7 +546,7 @@ function setStorage<T>(key: string, data: T): void {
 export function initDb() {
   if (!isBrowser()) return;
   
-  const DB_VERSION = "v3";
+  const DB_VERSION = "v4";
   const currentVersion = localStorage.getItem("iroko_db_version");
   
   if (!localStorage.getItem("iroko_organizations") || currentVersion !== DB_VERSION) {
