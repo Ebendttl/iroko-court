@@ -109,6 +109,12 @@ export default function StorefrontHome() {
         <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-brand-terracotta/5 blur-[100px]"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center py-20">
+          <div className="flex justify-center mb-8">
+            <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-brand-forest-dark/40 p-1">
+              <img src="/logo.png" alt="Iroko Court Logo" className="w-full h-full object-cover" />
+            </div>
+          </div>
+
           <div className="inline-flex items-center space-x-2 bg-brand-forest/40 border border-brand-cream/10 rounded-full px-4 py-1.5 mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></span>
             <span className="text-[10px] tracking-widest uppercase text-brand-gold-light font-bold">Discover Iroko Court</span>

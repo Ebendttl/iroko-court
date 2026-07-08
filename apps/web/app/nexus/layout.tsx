@@ -23,8 +23,8 @@ export default function NexusLayout({
         <div>
           {/* Brand Header */}
           <div className="h-20 border-b border-brand-forest-light/20 flex items-center px-6 space-x-3 bg-brand-forest-dark/40">
-            <div className="w-8 h-8 rounded bg-brand-gold flex items-center justify-center">
-              <span className="font-serif text-brand-charcoal font-bold text-sm">N</span>
+            <div className="w-8 h-8 rounded overflow-hidden flex items-center justify-center shadow shrink-0">
+              <img src="/logo.png" alt="Iroko Court Logo" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-white font-bold tracking-tight text-lg leading-none">CANOPY NEXUS</span>
@@ -114,8 +114,11 @@ export default function NexusLayout({
       <div className="flex-grow flex flex-col min-h-screen overflow-x-hidden">
         {/* Top Header */}
         <header className="h-20 bg-white border-b border-zinc-200/60 flex items-center justify-between px-8 shrink-0">
-          <div className="flex items-center space-x-4">
-            <h2 className="font-serif text-lg font-bold text-brand-forest">Iroko Court Executive Hub</h2>
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded overflow-hidden shadow-sm shrink-0">
+              <img src="/logo.png" alt="Iroko Court Logo" className="w-full h-full object-cover" />
+            </div>
+            <h2 className="font-serif text-base md:text-lg font-bold text-brand-forest">Iroko Court Executive Hub</h2>
           </div>
           
           <div className="flex items-center space-x-6 text-xs text-brand-charcoal/60">

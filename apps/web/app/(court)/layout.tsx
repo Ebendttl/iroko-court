@@ -14,8 +14,8 @@ export default function CourtLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-lg bg-brand-forest flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-md">
-              <span className="font-serif text-white font-bold text-lg">IC</span>
+            <div className="w-10 h-10 rounded-lg overflow-hidden transition-all duration-300 group-hover:scale-105 shadow-md shrink-0">
+              <img src="/logo.png" alt="Iroko Court Logo" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-brand-forest font-bold tracking-tight text-xl leading-none">IROKO COURT</span>
@@ -76,8 +76,8 @@ export default function CourtLayout({
             {/* Brand Info */}
             <div className="space-y-4 md:col-span-2">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-lg bg-brand-cream flex items-center justify-center">
-                  <span className="font-serif text-brand-forest font-bold text-lg">IC</span>
+                <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 shadow-md">
+                  <img src="/logo.png" alt="Iroko Court Logo" className="w-full h-full object-cover" />
                 </div>
                 <span className="font-serif text-white font-bold text-2xl tracking-tight">IROKO COURT</span>
               </div>
