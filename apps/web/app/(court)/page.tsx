@@ -51,7 +51,12 @@ export default function StorefrontHome() {
       setTestimonials(test);
       
       const soon = await getComingSoonUnits();
-      setComingSoon(soon);
+      // Deduplicate by name in case both Supabase and localStorage return data
+      const uniqueSoon = soon.filter(
+        (unit: any, idx: number, arr: any[]) =>
+          arr.findIndex((u: any) => u.name === unit.name) === idx
+      );
+      setComingSoon(uniqueSoon);
       
       const dl = await getDeals();
       setDeals(dl);
@@ -499,7 +504,14 @@ export default function StorefrontHome() {
               <div className="h-56 bg-zinc-900 relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={unit.image_url} 
+                  src={
+                    unit.image_url ||
+                    (unit.name === "The Yard"
+                      ? "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800"
+                      : unit.name === "The Stay"
+                      ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800"
+                      : "https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=800")
+                  }
                   alt={unit.name} 
                   className="w-full h-full object-cover opacity-80 grayscale-[30%]"
                 />

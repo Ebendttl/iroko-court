@@ -287,7 +287,7 @@ values
 on conflict do nothing;
 
 -- 12. SEED COMING SOON UNITS
-insert into public.coming_soon_units (id, name, description, icon, expected_launch_label, is_active)
+insert into public.coming_soon_units (id, name, description, icon, expected_launch_label, is_active, image_url)
 values
 (
     gen_random_uuid(),
@@ -295,7 +295,8 @@ values
     'Premium eco-friendly car wash and professional detailing, keeping your vehicle pristine while you dine at The Table.',
     'car',
     'Q3 2026',
-    true
+    true,
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800'
 ),
 (
     gen_random_uuid(),
@@ -303,7 +304,8 @@ values
     'Stylishly furnished boutique shortlet apartments for temporary stays, event guests, and business travelers.',
     'bed',
     'Q4 2026',
-    true
+    true,
+    'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800'
 ),
 (
     gen_random_uuid(),
@@ -311,9 +313,11 @@ values
     'A fully-stocked mini-mart offering daily essentials, snacks, beverages, and household goods at your convenience.',
     'shopping-bag',
     'Q1 2027',
-    true
+    true,
+    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=800'
 )
 on conflict do nothing;
+
 
 -- 13. SEED DEALS & PROMOTIONS
 insert into public.deals_promotions (id, title, discount_label, valid_from, valid_until, is_active)
