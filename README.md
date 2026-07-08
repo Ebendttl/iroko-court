@@ -18,6 +18,7 @@ A modern full-stack monorepo powering the **Iroko Court** platform, with a web a
 - [Technology Stack](#technology-stack)
 - [Language Composition](#language-composition)
 - [Architecture](#architecture)
+- [Production Deployment & Database Integration](#production-deployment--database-integration)
 - [Project Structure](#project-structure)
 - [Workspace Packages](#workspace-packages)
 - [Getting Started](#getting-started)
@@ -125,6 +126,31 @@ flowchart LR
 - `packages/ui` provides cross-feature visual primitives/components.
 - `packages/database` captures DB-level artifacts and related integration logic.
 - `packages/config` acts as a central place for shared configuration concerns.
+
+---
+
+## Production Deployment & Database Integration
+
+### Vercel Deployment Setup
+The project is configured as a Monorepo on Vercel:
+- **Root Directory**: `apps/web`
+- **Framework Preset**: Next.js
+- **Build Orchestration**: Vercel natively detects the `pnpm` workspaces configuration. Redundant configuration boundaries (such as root-level or nested `vercel.json` scripts) have been trimmed down to let Vercel handle Next.js compilation paths out-of-the-box.
+
+### Hybrid Data Access Layer
+The primary client data coordinator in `apps/web/lib/db.ts` exposes a hybrid mechanism:
+- It queries the live **Supabase PostgreSQL** instance in production.
+- If Supabase connections are missing or misconfigured locally, it falls back gracefully to `localStorage` client persistence. This ensures development stays offline-ready while the production environment is fully database-driven.
+
+### Database Seeding
+The schema and seed files live under `packages/database/migrations/`:
+- `20260702000000_init.sql` builds the table definitions (including row-level security and trigger functions).
+- `20260702000001_seed.sql` populates reference data, transactional logs, and operational mock entities (such as orders, logs, and enquiries).
+
+### UI/UX Refinements
+- **Landing Page Image Recovery**: Safe fallback image mappings are declared directly in the component props if `image_url` fields are returned empty from the database.
+- **Mobile Subheaders**: Subheader flex containers (`leads`, `press`, `table`, `hall`, `reports`) are fully responsive, converting to stacked column layouts (`flex flex-col sm:flex-row gap-4`) on mobile viewports.
+- **Action Badge & Button Protection**: Utilizes `whitespace-nowrap` styling on all primary dashboard triggers (such as *Active Leads*, *Record Daily Sales*, *New Laundry Ticket*) to prevent line breaks and border overflows on small device viewports.
 
 ---
 
