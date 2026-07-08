@@ -70,12 +70,12 @@ export default function LeadsQueue() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-zinc-200/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200/60">
         <div>
           <h1 className="font-serif text-2xl font-bold text-brand-forest">Inquiry Leads Queue</h1>
           <p className="text-xs text-brand-charcoal/60">Manage incoming lead submissions from the Iroko Court public storefront.</p>
         </div>
-        <span className="bg-brand-forest text-white text-xs font-bold px-3 py-1 rounded-full">
+        <span className="bg-brand-forest text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap inline-flex items-center justify-center h-fit self-start sm:self-center">
           {leads.filter(l => !processedLeads[l.id]).length} Active Leads
         </span>
       </div>

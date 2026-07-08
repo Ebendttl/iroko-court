@@ -99,7 +99,7 @@ export default function ReportsModule() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-zinc-200/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200/60">
         <div>
           <h1 className="font-serif text-2xl font-bold text-brand-forest">Financial Reporting Centre</h1>
           <p className="text-xs text-brand-charcoal/60">Analyze cash flow records, filter audits, and compile spreadsheet summaries.</p>
@@ -107,9 +107,9 @@ export default function ReportsModule() {
         <button
           onClick={handleExportCSV}
           disabled={filteredTxs.length === 0}
-          className="h-10 px-4 rounded bg-brand-forest text-white text-xs font-bold hover:bg-brand-forest-light transition-all flex items-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="h-10 px-4 rounded bg-brand-forest text-white text-xs font-bold hover:bg-brand-forest-light transition-all flex items-center justify-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap w-fit shrink-0 self-start sm:self-center"
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-4 h-4 shrink-0" />
           <span>Export Excel (.CSV)</span>
         </button>
       </div>

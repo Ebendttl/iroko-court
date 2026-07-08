@@ -102,16 +102,16 @@ export default function NexusHall() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-zinc-200/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200/60">
         <div>
           <h1 className="font-serif text-2xl font-bold text-brand-forest">The Hall Bookings Manager</h1>
           <p className="text-xs text-brand-charcoal/60">Manage bookings, confirm client dates, and complete events to sync directly to the ledger.</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="h-10 px-4 rounded bg-brand-forest text-white text-xs font-bold hover:bg-brand-forest-light transition-all flex items-center space-x-1.5"
+          className="h-10 px-4 rounded bg-brand-forest text-white text-xs font-bold hover:bg-brand-forest-light transition-all flex items-center justify-center space-x-1.5 whitespace-nowrap w-fit shrink-0 self-start sm:self-center"
         >
-          <PlusCircle className="w-4 h-4" />
+          <PlusCircle className="w-4 h-4 shrink-0" />
           <span>New Booking</span>
         </button>
       </div>
