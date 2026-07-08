@@ -28,6 +28,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans text-brand-charcoal bg-brand-cream selection:bg-brand-forest selection:text-white">
         {children}
