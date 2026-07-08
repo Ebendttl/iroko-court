@@ -3,6 +3,5 @@
   "framework": "nextjs",
   "installCommand": "pnpm install --frozen-lockfile=false",
   "buildCommand": "cd apps/web && pnpm build",
-  "outputDirectory": "apps/web/.next",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web/ packages/"
+  "outputDirectory": "apps/web/.next"
 }
