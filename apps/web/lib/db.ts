@@ -546,7 +546,10 @@ function setStorage<T>(key: string, data: T): void {
 export function initDb() {
   if (!isBrowser()) return;
   
-  if (!localStorage.getItem("iroko_organizations")) {
+  const DB_VERSION = "v2";
+  const currentVersion = localStorage.getItem("iroko_db_version");
+  
+  if (!localStorage.getItem("iroko_organizations") || currentVersion !== DB_VERSION) {
     setStorage("iroko_organizations", SEED_ORGANIZATIONS);
     setStorage("iroko_business_units", SEED_BUSINESS_UNITS);
     setStorage("iroko_categories", SEED_CATEGORIES);
@@ -562,6 +565,7 @@ export function initDb() {
     setStorage("iroko_laundry_orders", SEED_LAUNDRY_ORDERS);
     setStorage("iroko_public_enquiries", SEED_PUBLIC_ENQUIRIES);
     setStorage("iroko_budgets", SEED_BUDGETS);
+    localStorage.setItem("iroko_db_version", DB_VERSION);
     
     // Recompute daily summaries rollups from seeded transactions
     recomputeRollups();

@@ -1,18 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = { variable: "font-sans" };
+const fraunces = { variable: "font-serif" };
 
 export const metadata: Metadata = {
   title: "Canopy | Iroko Court",
