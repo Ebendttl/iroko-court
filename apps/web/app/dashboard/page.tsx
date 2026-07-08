@@ -408,73 +408,114 @@ export default function NexusDashboard() {
 
       {/* 4. BOTTOM LEDGER TABLE */}
       <div className="bg-white border border-zinc-200/60 rounded-xl shadow-sm overflow-hidden">
-        <div className="px-6 py-5 border-b border-zinc-200/60 flex items-center justify-between">
+        <div className="px-4 md:px-6 py-5 border-b border-zinc-200/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
           <h3 className="font-serif text-lg font-bold text-brand-forest">Unified Financial Ledger</h3>
           <span className="text-xs text-brand-charcoal/40 font-medium font-sans">
-            Showing {filteredTxs.length} entries (Sorted Chronologically)
+            {filteredTxs.length} entries · Sorted Chronologically
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-zinc-50/50 border-b border-zinc-100 text-brand-charcoal/40 uppercase tracking-widest font-bold font-sans">
-                <th className="py-3 px-6">Date</th>
-                <th className="py-3 px-6">Unit</th>
-                <th className="py-3 px-6">Description</th>
-                <th className="py-3 px-6">Category</th>
-                <th className="py-3 px-6">Source</th>
-                <th className="py-3 px-6 text-right">Amount</th>
-                <th className="py-3 px-6 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-100">
-              {filteredTxs.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center italic text-brand-charcoal/40">
-                    No transactions recorded matching the selected filter.
-                  </td>
-                </tr>
-              ) : (
-                filteredTxs.map(tx => (
-                  <tr key={tx.id} className="hover:bg-zinc-50/40 transition-colors">
-                    <td className="py-3.5 px-6 font-medium text-brand-charcoal/80">{tx.transaction_date}</td>
-                    <td className="py-3.5 px-6 font-semibold">
-                      <span className={`px-2 py-0.5 rounded text-[10px] ${
-                        tx.business_unit_id === "a1111111-1111-1111-1111-111111111111" 
-                          ? "bg-brand-gold/15 text-brand-charcoal" 
-                          : tx.business_unit_id === "b2222222-2222-2222-2222-222222222222"
-                            ? "bg-brand-terracotta/15 text-brand-terracotta"
-                            : "bg-brand-slate/15 text-brand-slate"
-                      }`}>
-                        {getBUName(tx.business_unit_id)}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-6 font-medium max-w-xs truncate">{tx.description}</td>
-                    <td className="py-3.5 px-6 text-brand-charcoal/60">{getCatName(tx.category_id)}</td>
-                    <td className="py-3.5 px-6">
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-brand-charcoal/40">
-                        {tx.source}
-                      </span>
-                    </td>
-                    <td className={`py-3.5 px-6 text-right font-serif font-bold text-sm ${tx.type === "income" ? "text-emerald-600" : "text-brand-terracotta"}`}>
+        {filteredTxs.length === 0 ? (
+          <p className="py-12 text-center italic text-brand-charcoal/40 text-xs">
+            No transactions recorded matching the selected filter.
+          </p>
+        ) : (
+          <>
+            {/* ── MOBILE: stacked cards (hidden on md+) ── */}
+            <div className="md:hidden divide-y divide-zinc-100">
+              {filteredTxs.map(tx => (
+                <div key={tx.id} className="p-4 space-y-2">
+                  {/* Row 1: date + amount */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-brand-charcoal/50">{tx.transaction_date}</span>
+                    <span className={`font-serif font-bold text-sm ${tx.type === "income" ? "text-emerald-600" : "text-brand-terracotta"}`}>
                       {tx.type === "income" ? "+" : "-"}₦{Number(tx.amount).toLocaleString()}
-                    </td>
-                    <td className="py-3.5 px-6 text-center">
-                      <button 
-                        onClick={() => handleDeleteTransaction(tx.id)}
-                        className="text-brand-charcoal/30 hover:text-brand-terracotta transition-colors"
-                        title="Void entry"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
+                    </span>
+                  </div>
+                  {/* Row 2: description (full, wrapping) */}
+                  <p className="text-xs font-medium text-brand-charcoal leading-snug break-words">
+                    {tx.description}
+                  </p>
+                  {/* Row 3: unit badge + category + source + delete */}
+                  <div className="flex items-center flex-wrap gap-2">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      tx.business_unit_id === "a1111111-1111-1111-1111-111111111111"
+                        ? "bg-brand-gold/15 text-brand-charcoal"
+                        : tx.business_unit_id === "b2222222-2222-2222-2222-222222222222"
+                          ? "bg-brand-terracotta/15 text-brand-terracotta"
+                          : "bg-brand-slate/15 text-brand-slate"
+                    }`}>
+                      {getBUName(tx.business_unit_id)}
+                    </span>
+                    <span className="text-[10px] text-brand-charcoal/50">{getCatName(tx.category_id)}</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-brand-charcoal/30">{tx.source}</span>
+                    <button
+                      onClick={() => handleDeleteTransaction(tx.id)}
+                      className="ml-auto text-brand-charcoal/30 hover:text-brand-terracotta transition-colors"
+                      title="Void entry"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ── DESKTOP: table (hidden on mobile) ── */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-zinc-50/50 border-b border-zinc-100 text-brand-charcoal/40 uppercase tracking-widest font-bold font-sans">
+                    <th className="py-3 px-6">Date</th>
+                    <th className="py-3 px-6">Unit</th>
+                    <th className="py-3 px-6">Description</th>
+                    <th className="py-3 px-6">Category</th>
+                    <th className="py-3 px-6">Source</th>
+                    <th className="py-3 px-6 text-right">Amount</th>
+                    <th className="py-3 px-6 text-center">Action</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody className="divide-y divide-zinc-100">
+                  {filteredTxs.map(tx => (
+                    <tr key={tx.id} className="hover:bg-zinc-50/40 transition-colors">
+                      <td className="py-3.5 px-6 font-medium text-brand-charcoal/80">{tx.transaction_date}</td>
+                      <td className="py-3.5 px-6 font-semibold">
+                        <span className={`px-2 py-0.5 rounded text-[10px] ${
+                          tx.business_unit_id === "a1111111-1111-1111-1111-111111111111"
+                            ? "bg-brand-gold/15 text-brand-charcoal"
+                            : tx.business_unit_id === "b2222222-2222-2222-2222-222222222222"
+                              ? "bg-brand-terracotta/15 text-brand-terracotta"
+                              : "bg-brand-slate/15 text-brand-slate"
+                        }`}>
+                          {getBUName(tx.business_unit_id)}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-6 font-medium max-w-xs truncate">{tx.description}</td>
+                      <td className="py-3.5 px-6 text-brand-charcoal/60">{getCatName(tx.category_id)}</td>
+                      <td className="py-3.5 px-6">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-brand-charcoal/40">
+                          {tx.source}
+                        </span>
+                      </td>
+                      <td className={`py-3.5 px-6 text-right font-serif font-bold text-sm ${tx.type === "income" ? "text-emerald-600" : "text-brand-terracotta"}`}>
+                        {tx.type === "income" ? "+" : "-"}₦{Number(tx.amount).toLocaleString()}
+                      </td>
+                      <td className="py-3.5 px-6 text-center">
+                        <button
+                          onClick={() => handleDeleteTransaction(tx.id)}
+                          className="text-brand-charcoal/30 hover:text-brand-terracotta transition-colors"
+                          title="Void entry"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
