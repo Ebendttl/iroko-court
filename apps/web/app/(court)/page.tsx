@@ -242,7 +242,7 @@ export default function StorefrontHome() {
             <div className="h-56 bg-zinc-900 relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
-                src="https://images.unsplash.com/photo-1545173168-9f1947eebd01?auto=format&fit=crop&q=80&w=800" 
+                src="https://images.unsplash.com/photo-1489274495757-95c7c837b101?auto=format&fit=crop&q=80&w=800" 
                 alt="The Press" 
                 className="w-full h-full object-cover opacity-90"
               />
@@ -494,21 +494,31 @@ export default function StorefrontHome() {
           {comingSoon.map(unit => (
             <div 
               key={unit.id} 
-              className="bg-brand-mist/30 border border-zinc-200/60 rounded-xl p-8 flex flex-col justify-between opacity-70 hover:opacity-100 transition-opacity duration-300 relative overflow-hidden"
+              className="flex flex-col bg-white rounded-xl shadow-md border border-zinc-200/60 overflow-hidden hover-lift hover:border-brand-forest/20 transition-all duration-300 opacity-80 hover:opacity-100"
             >
-              <div className="space-y-4">
-                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-brand-forest shadow-sm border border-zinc-100">
-                  <span className="font-semibold text-xs tracking-wider uppercase">{unit.name.split(" ")[1]}</span>
+              <div className="h-56 bg-zinc-900 relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={unit.image_url} 
+                  alt={unit.name} 
+                  className="w-full h-full object-cover opacity-80 grayscale-[30%]"
+                />
+                <div className="absolute top-4 left-4 bg-brand-forest text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded">
+                  {unit.name.split(" ")[1] || unit.name}
                 </div>
-                <h3 className="font-serif text-xl font-bold text-brand-charcoal">{unit.name}</h3>
-                <p className="text-xs text-brand-charcoal/60 leading-relaxed">{unit.description}</p>
               </div>
-              
-              <div className="pt-6 border-t border-zinc-200/60 mt-6 flex items-center justify-between text-xs">
-                <span className="text-[10px] text-brand-charcoal/40 font-bold uppercase">EXPECTED LAUNCH</span>
-                <span className="bg-brand-forest text-white text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full">
-                  {unit.expected_launch_label}
-                </span>
+              <div className="p-8 flex-grow flex flex-col justify-between">
+                <div className="space-y-4">
+                  <h3 className="font-serif text-2xl font-bold text-brand-forest">{unit.name}</h3>
+                  <p className="text-sm text-brand-charcoal/70 leading-relaxed">{unit.description}</p>
+                </div>
+                
+                <div className="pt-6 border-t border-zinc-100 mt-6 flex items-center justify-between text-xs">
+                  <span className="text-[10px] text-brand-charcoal/40 font-bold uppercase">EXPECTED LAUNCH</span>
+                  <span className="bg-brand-forest/10 text-brand-forest text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full">
+                    {unit.expected_launch_label}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

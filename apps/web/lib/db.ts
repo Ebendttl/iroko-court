@@ -232,6 +232,7 @@ const SEED_COMING_SOON_UNITS = [
     name: "The Yard",
     description: "Premium eco-friendly car wash and professional detailing, keeping your vehicle pristine while you dine at The Table.",
     icon: "car",
+    image_url: "https://images.unsplash.com/photo-1520340356584-f9917d1eed69?auto=format&fit=crop&q=80&w=800",
     expected_launch_label: "Q3 2026",
     is_active: true
   },
@@ -240,6 +241,7 @@ const SEED_COMING_SOON_UNITS = [
     name: "The Stay",
     description: "Stylishly furnished boutique shortlet apartments for temporary stays, event guests, and business travelers.",
     icon: "bed",
+    image_url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800",
     expected_launch_label: "Q4 2026",
     is_active: true
   },
@@ -248,6 +250,7 @@ const SEED_COMING_SOON_UNITS = [
     name: "The Corner",
     description: "A fully-stocked mini-mart offering daily essentials, snacks, beverages, and household goods at your convenience.",
     icon: "shopping-bag",
+    image_url: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=800",
     expected_launch_label: "Q1 2027",
     is_active: true
   }
