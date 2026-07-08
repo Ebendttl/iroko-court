@@ -421,3 +421,221 @@ values
     'manual'
 )
 on conflict do nothing;
+
+-- 15. SEED SAMPLE LAUNDRY ORDERS (The Press dashboard data)
+insert into public.laundry_orders (id, business_unit_id, customer_name, customer_contact, items_description, drop_off_date, pickup_date, status, amount_charged)
+values
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'Adebayo Okafor',
+    '+234 803 456 7890',
+    '2x Agbada sets, 1x Senator wear - premium starch & dry clean',
+    current_date - interval '3 days',
+    current_date + interval '1 day',
+    'in_progress',
+    18500.00
+),
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'Chioma Nwosu',
+    '+234 805 234 5678',
+    '3x Ankara dresses, 2x silk blouses - gentle wash & press',
+    current_date - interval '2 days',
+    current_date,
+    'ready',
+    12000.00
+),
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'Emeka Duru',
+    '+234 812 345 6789',
+    '5x dress shirts, 4x trousers, 2x suits - standard dry clean',
+    current_date - interval '1 day',
+    current_date + interval '2 days',
+    'received',
+    22000.00
+),
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'Funmilayo Balogun',
+    '+234 701 234 5678',
+    '1x Aso-oke full set, 2x lace fabric blouses - delicate hand press',
+    current_date - interval '5 days',
+    current_date - interval '1 day',
+    'collected',
+    35000.00
+),
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'Tunde Adeleke',
+    '+234 808 765 4321',
+    '4x work trousers, 6x shirts - express 6-hour turnaround',
+    current_date,
+    current_date,
+    'received',
+    15500.00
+)
+on conflict do nothing;
+
+-- 16. SEED SAMPLE EATERY DAILY SALES (The Table dashboard data)
+insert into public.eatery_daily_sales (id, business_unit_id, sale_date, total_covers, total_revenue)
+values
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '6 days',
+    42,
+    187500.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '5 days',
+    38,
+    156200.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '4 days',
+    55,
+    243000.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '3 days',
+    61,
+    298750.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '2 days',
+    47,
+    205000.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date - interval '1 day',
+    73,
+    342500.00
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    current_date,
+    28,
+    118000.00
+)
+on conflict do nothing;
+
+-- 17. SEED SAMPLE EVENT BOOKINGS (The Hall dashboard data)
+insert into public.event_bookings (id, business_unit_id, client_name, client_contact, event_date, hall_name, total_quoted, deposit_amount, status)
+values
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'Oluwaseun & Adesola Fashola',
+    '+234 802 345 6789',
+    current_date + interval '14 days',
+    'Palm Suite',
+    4500000.00,
+    1350000.00,
+    'confirmed'
+),
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'GTBank PLC - HR Division',
+    '+234 1 448 0000',
+    current_date + interval '7 days',
+    'Iroko Grand Hall',
+    2800000.00,
+    840000.00,
+    'confirmed'
+),
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'Bola & Kemi Adeyemi',
+    '+234 806 543 2109',
+    current_date + interval '30 days',
+    'Canopy Terrace',
+    1800000.00,
+    540000.00,
+    'inquiry'
+),
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'Access Bank Corporate Events',
+    '+234 700 300 0000',
+    current_date - interval '7 days',
+    'Iroko Grand Hall',
+    3200000.00,
+    3200000.00,
+    'completed'
+)
+on conflict do nothing;
+
+-- 18. SEED SAMPLE PUBLIC ENQUIRIES (Leads dashboard data)
+insert into public.public_enquiries (id, business_unit_id, type, full_name, phone, email, message, status)
+values
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'event_enquiry',
+    'Ngozi Adichie-Obi',
+    '+234 803 111 2222',
+    'ngozi.adichie@email.com',
+    'We are planning a traditional wedding ceremony for 350 guests in September. Please send packages and availability.',
+    'new'
+),
+(
+    gen_random_uuid(),
+    'c3333333-3333-3333-3333-333333333333',
+    'laundry_pickup',
+    'Chukwuemeka Eze',
+    '+234 815 444 5555',
+    'emeka.eze@work.com',
+    'I need express 6-hour dry cleaning for 3 suits before a board meeting tomorrow morning.',
+    'contacted'
+),
+(
+    gen_random_uuid(),
+    'b2222222-2222-2222-2222-222222222222',
+    'eatery_order',
+    'Sade Okonkwo',
+    '+234 706 777 8888',
+    'sade.o@gmail.com',
+    'Office lunch order for 12 people. Interested in Jollof rice, grilled chicken and suya platters.',
+    'new'
+),
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'event_enquiry',
+    'Biodun Adetokunbo',
+    '+234 809 333 4444',
+    'biodun.a@company.ng',
+    'Annual company dinner for approximately 200 staff. Date flexible between October and November.',
+    'new'
+),
+(
+    gen_random_uuid(),
+    'a1111111-1111-1111-1111-111111111111',
+    'event_enquiry',
+    'Mrs. Folasade Martins',
+    '+234 802 999 0000',
+    'folasade.m@hotmail.com',
+    'Engagement party for 80 guests. Looking for a classy intimate setting with full catering included.',
+    'converted'
+)
+on conflict do nothing;
