@@ -5,6 +5,7 @@ import {
   EaterySaleInput, 
   LaundryOrderInput 
 } from "@iroko-court/shared";
+import { supabase } from "./supabase";
 
 // Seed constants matching the SQL schema exactly
 const ORG_ID = "d3b07384-d113-4e4e-9824-74e1d1ee8a3e";
@@ -642,16 +643,33 @@ function applyTransactionToRollup(businessUnitId: string, date: string, type: "i
 // API Methods (Asynchronous to match network fetches)
 
 export async function getOrganizations() {
+  if (supabase) {
+    const { data, error } = await supabase.from("organizations").select("*");
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getOrganizations", error.message);
+  }
   initDb();
   return getStorage<any[]>("iroko_organizations", []);
 }
 
 export async function getBusinessUnits() {
+  if (supabase) {
+    const { data, error } = await supabase.from("business_units").select("*").eq("is_active", true);
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getBusinessUnits", error.message);
+  }
   initDb();
   return getStorage<any[]>("iroko_business_units", SEED_BUSINESS_UNITS);
 }
 
 export async function getCategories(businessUnitId?: string) {
+  if (supabase) {
+    let q = supabase.from("categories").select("*");
+    if (businessUnitId) q = q.eq("business_unit_id", businessUnitId);
+    const { data, error } = await q;
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getCategories", error.message);
+  }
   initDb();
   const all = getStorage<any[]>("iroko_categories", []);
   if (businessUnitId) {
@@ -661,6 +679,13 @@ export async function getCategories(businessUnitId?: string) {
 }
 
 export async function getTransactions(businessUnitId?: string) {
+  if (supabase) {
+    let q = supabase.from("transactions").select("*").order("transaction_date", { ascending: false });
+    if (businessUnitId) q = q.eq("business_unit_id", businessUnitId);
+    const { data, error } = await q;
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getTransactions", error.message);
+  }
   initDb();
   const all = getStorage<any[]>("iroko_transactions", []);
   all.sort((a, b) => new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());
@@ -672,6 +697,21 @@ export async function getTransactions(businessUnitId?: string) {
 }
 
 export async function getBudgets(businessUnitId?: string) {
+  if (supabase) {
+    let q = supabase.from("budgets").select("*, budget_line_items(*)");
+    if (businessUnitId) q = q.eq("business_unit_id", businessUnitId);
+    const { data, error } = await q;
+    if (!error && data) {
+      return data.map(b => ({
+        ...b,
+        limits: (b.budget_line_items || []).map((li: any) => ({
+          category_id: li.category_id,
+          limit_amount: Number(li.limit_amount)
+        }))
+      }));
+    }
+    if (error) console.error("Supabase error: getBudgets", error.message);
+  }
   initDb();
   const all = getStorage<any[]>("iroko_budgets", []);
   if (businessUnitId) {
@@ -681,6 +721,13 @@ export async function getBudgets(businessUnitId?: string) {
 }
 
 export async function getDailySummaries(businessUnitId?: string) {
+  if (supabase) {
+    let q = supabase.from("daily_summaries").select("*").order("summary_date", { ascending: false });
+    if (businessUnitId) q = q.eq("business_unit_id", businessUnitId);
+    const { data, error } = await q;
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getDailySummaries", error.message);
+  }
   initDb();
   const all = getStorage<any[]>("iroko_daily_summaries", []);
   all.sort((a, b) => new Date(b.summary_date).getTime() - new Date(a.summary_date).getTime());
@@ -692,11 +739,21 @@ export async function getDailySummaries(businessUnitId?: string) {
 }
 
 export async function getEventPackages() {
+  if (supabase) {
+    const { data, error } = await supabase.from("event_packages").select("*").eq("is_active", true);
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getEventPackages", error.message);
+  }
   initDb();
   return getStorage<any[]>("iroko_event_packages", []);
 }
 
 export async function getEventBookings() {
+  if (supabase) {
+    const { data, error } = await supabase.from("event_bookings").select("*").order("event_date", { ascending: false });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getEventBookings", error.message);
+  }
   initDb();
   const bookings = getStorage<any[]>("iroko_event_bookings", []);
   bookings.sort((a, b) => new Date(b.event_date).getTime() - new Date(a.event_date).getTime());
@@ -704,6 +761,11 @@ export async function getEventBookings() {
 }
 
 export async function getMenuItems() {
+  if (supabase) {
+    const { data, error } = await supabase.from("menu_items").select("*").eq("is_active", true).order("display_order", { ascending: true });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getMenuItems", error.message);
+  }
   initDb();
   const items = getStorage<any[]>("iroko_menu_items", []);
   items.sort((a, b) => a.display_order - b.display_order);
@@ -711,6 +773,11 @@ export async function getMenuItems() {
 }
 
 export async function getEateryDailySales() {
+  if (supabase) {
+    const { data, error } = await supabase.from("eatery_daily_sales").select("*").order("sale_date", { ascending: false });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getEateryDailySales", error.message);
+  }
   initDb();
   const sales = getStorage<any[]>("iroko_eatery_daily_sales", []);
   sales.sort((a, b) => new Date(b.sale_date).getTime() - new Date(a.sale_date).getTime());
@@ -718,6 +785,11 @@ export async function getEateryDailySales() {
 }
 
 export async function getLaundryServices() {
+  if (supabase) {
+    const { data, error } = await supabase.from("laundry_services").select("*").eq("is_active", true).order("display_order", { ascending: true });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getLaundryServices", error.message);
+  }
   initDb();
   const services = getStorage<any[]>("iroko_laundry_services", []);
   services.sort((a, b) => a.display_order - b.display_order);
@@ -725,6 +797,11 @@ export async function getLaundryServices() {
 }
 
 export async function getLaundryOrders() {
+  if (supabase) {
+    const { data, error } = await supabase.from("laundry_orders").select("*").order("drop_off_date", { ascending: false });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getLaundryOrders", error.message);
+  }
   initDb();
   const orders = getStorage<any[]>("iroko_laundry_orders", []);
   orders.sort((a, b) => new Date(b.drop_off_date).getTime() - new Date(a.drop_off_date).getTime());
@@ -732,6 +809,13 @@ export async function getLaundryOrders() {
 }
 
 export async function getTestimonials(businessUnitId?: string) {
+  if (supabase) {
+    let q = supabase.from("testimonials").select("*").eq("is_active", true);
+    if (businessUnitId) q = q.eq("business_unit_id", businessUnitId);
+    const { data, error } = await q;
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getTestimonials", error.message);
+  }
   initDb();
   const testimonials = getStorage<any[]>("iroko_testimonials", []);
   if (businessUnitId) {
@@ -741,25 +825,58 @@ export async function getTestimonials(businessUnitId?: string) {
 }
 
 export async function getComingSoonUnits() {
+  if (supabase) {
+    const { data, error } = await supabase.from("coming_soon_units").select("*").eq("is_active", true);
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getComingSoonUnits", error.message);
+  }
   initDb();
   return getStorage<any[]>("iroko_coming_soon_units", []);
 }
 
 export async function getDeals() {
+  if (supabase) {
+    const { data, error } = await supabase.from("deals_promotions").select("*").eq("is_active", true);
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getDeals", error.message);
+  }
   initDb();
   return getStorage<any[]>("iroko_deals", []);
 }
 
 export async function getPublicEnquiries() {
+  if (supabase) {
+    const { data, error } = await supabase.from("public_enquiries").select("*").order("created_at", { ascending: false });
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: getPublicEnquiries", error.message);
+  }
   initDb();
   const enquiries = getStorage<any[]>("iroko_public_enquiries", []);
   enquiries.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return enquiries;
 }
 
-// Mutators (with trigger simulations)
+// Mutators (with trigger simulations / direct inserts)
 
 export async function createPublicEnquiry(enquiry: PublicEnquiryInput) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("public_enquiries")
+      .insert([{
+        business_unit_id: enquiry.business_unit_id,
+        type: enquiry.type,
+        full_name: enquiry.full_name,
+        phone: enquiry.phone,
+        email: enquiry.email,
+        message: enquiry.message,
+        metadata: enquiry.metadata || {},
+        status: "new"
+      }])
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: createPublicEnquiry", error.message);
+  }
   initDb();
   const enquiries = getStorage<any[]>("iroko_public_enquiries", []);
   const newEnquiry = {
@@ -774,6 +891,27 @@ export async function createPublicEnquiry(enquiry: PublicEnquiryInput) {
 }
 
 export async function createTransaction(tx: TransactionInput) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("transactions")
+      .insert([{
+        org_id: ORG_ID,
+        business_unit_id: tx.business_unit_id,
+        type: tx.type,
+        category_id: tx.category_id,
+        subcategory_id: tx.subcategory_id,
+        amount: tx.amount,
+        currency: tx.currency || "NGN",
+        description: tx.description,
+        transaction_date: tx.transaction_date,
+        source: tx.source || "manual",
+        source_ref_id: tx.source_ref_id
+      }])
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: createTransaction", error.message);
+  }
   initDb();
   const transactions = getStorage<any[]>("iroko_transactions", []);
   const newTx = {
@@ -792,6 +930,11 @@ export async function createTransaction(tx: TransactionInput) {
 }
 
 export async function deleteTransaction(id: string) {
+  if (supabase) {
+    const { error } = await supabase.from("transactions").delete().eq("id", id);
+    if (!error) return true;
+    if (error) console.error("Supabase error: deleteTransaction", error.message);
+  }
   initDb();
   const transactions = getStorage<any[]>("iroko_transactions", []);
   const tx = transactions.find(t => t.id === id);
@@ -807,6 +950,25 @@ export async function deleteTransaction(id: string) {
 }
 
 export async function createEventBooking(booking: EventBookingInput) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("event_bookings")
+      .insert([{
+        business_unit_id: booking.business_unit_id,
+        client_name: booking.client_name,
+        client_contact: booking.client_contact,
+        event_date: booking.event_date,
+        package_id: booking.package_id,
+        hall_name: booking.hall_name,
+        total_quoted: booking.total_quoted,
+        deposit_amount: booking.deposit_amount,
+        status: booking.status || "inquiry"
+      }])
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: createEventBooking", error.message);
+  }
   initDb();
   const bookings = getStorage<any[]>("iroko_event_bookings", []);
   const newBooking = {
@@ -817,7 +979,7 @@ export async function createEventBooking(booking: EventBookingInput) {
   bookings.push(newBooking);
   setStorage("iroko_event_bookings", bookings);
   
-  // If completed initially (though unlikely for a new booking), sync to ledger
+  // If completed initially (though unlikely for a new booking), sync to ledger (simulation fallback only)
   if (booking.status === "completed") {
     await postBookingToLedger(newBooking);
   }
@@ -826,6 +988,16 @@ export async function createEventBooking(booking: EventBookingInput) {
 }
 
 export async function updateEventBookingStatus(id: string, status: "inquiry" | "confirmed" | "completed" | "cancelled") {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("event_bookings")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: updateEventBookingStatus", error.message);
+  }
   initDb();
   const bookings = getStorage<any[]>("iroko_event_bookings", []);
   const bookingIdx = bookings.findIndex(b => b.id === id);
@@ -836,11 +1008,11 @@ export async function updateEventBookingStatus(id: string, status: "inquiry" | "
   bookings[bookingIdx] = updatedBooking;
   setStorage("iroko_event_bookings", bookings);
   
-  // Trigger simulation: completed event -> post income ledger transaction
+  // Trigger simulation: completed event -> post income ledger transaction (simulation fallback only)
   if (status === "completed" && oldBooking.status !== "completed") {
     await postBookingToLedger(updatedBooking);
   } else if (status !== "completed" && oldBooking.status === "completed") {
-    // Delete corresponding transaction if downgraded from completed
+    // Delete corresponding transaction if downgraded from completed (simulation fallback only)
     const transactions = getStorage<any[]>("iroko_transactions", []);
     const tx = transactions.find(t => t.source === "booking" && t.source_ref_id === id);
     if (tx) {
@@ -853,7 +1025,7 @@ export async function updateEventBookingStatus(id: string, status: "inquiry" | "
 
 async function postBookingToLedger(booking: any) {
   const categories = await getCategories(BU_HALL_ID);
-  let revenueCat = categories.find(c => c.name === "Event Bookings Revenue" && c.type === "income");
+  let revenueCat = categories.find((c: any) => c.name === "Event Bookings Revenue" && c.type === "income");
   if (!revenueCat) {
     // Fail-safe category lookup
     revenueCat = { id: "f1111111-1111-1111-1111-111111111111" };
@@ -873,6 +1045,20 @@ async function postBookingToLedger(booking: any) {
 }
 
 export async function createEaterySale(sale: EaterySaleInput) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("eatery_daily_sales")
+      .insert([{
+        business_unit_id: sale.business_unit_id,
+        sale_date: sale.sale_date,
+        total_covers: sale.total_covers,
+        total_revenue: sale.total_revenue
+      }])
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: createEaterySale", error.message);
+  }
   initDb();
   const sales = getStorage<any[]>("iroko_eatery_daily_sales", []);
   const newSale = {
@@ -883,9 +1069,9 @@ export async function createEaterySale(sale: EaterySaleInput) {
   sales.push(newSale);
   setStorage("iroko_eatery_daily_sales", sales);
   
-  // Trigger simulation: eatery sale -> ledger
+  // Trigger simulation: eatery sale -> ledger (simulation fallback only)
   const categories = await getCategories(BU_TABLE_ID);
-  let revenueCat = categories.find(c => c.name === "Eatery Sales Revenue" && c.type === "income");
+  let revenueCat = categories.find((c: any) => c.name === "Eatery Sales Revenue" && c.type === "income");
   if (!revenueCat) {
     revenueCat = { id: "f2222222-2222-2222-2222-222222222221" };
   }
@@ -906,6 +1092,24 @@ export async function createEaterySale(sale: EaterySaleInput) {
 }
 
 export async function createLaundryOrder(order: LaundryOrderInput) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("laundry_orders")
+      .insert([{
+        business_unit_id: order.business_unit_id,
+        customer_name: order.customer_name,
+        customer_contact: order.customer_contact,
+        items_description: order.items_description,
+        drop_off_date: order.drop_off_date,
+        pickup_date: order.pickup_date,
+        status: order.status || "received",
+        amount_charged: order.amount_charged
+      }])
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: createLaundryOrder", error.message);
+  }
   initDb();
   const orders = getStorage<any[]>("iroko_laundry_orders", []);
   const newOrder = {
@@ -916,6 +1120,7 @@ export async function createLaundryOrder(order: LaundryOrderInput) {
   orders.push(newOrder);
   setStorage("iroko_laundry_orders", orders);
   
+  // Trigger simulation: completed laundry order -> ledger (simulation fallback only)
   if (order.status === "collected") {
     await postLaundryOrderToLedger(newOrder);
   }
@@ -924,6 +1129,16 @@ export async function createLaundryOrder(order: LaundryOrderInput) {
 }
 
 export async function updateLaundryOrderStatus(id: string, status: "received" | "in_progress" | "ready" | "collected") {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("laundry_orders")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+    if (!error && data) return data;
+    if (error) console.error("Supabase error: updateLaundryOrderStatus", error.message);
+  }
   initDb();
   const orders = getStorage<any[]>("iroko_laundry_orders", []);
   const orderIdx = orders.findIndex(o => o.id === id);
@@ -934,11 +1149,11 @@ export async function updateLaundryOrderStatus(id: string, status: "received" | 
   orders[orderIdx] = updatedOrder;
   setStorage("iroko_laundry_orders", orders);
   
-  // Trigger simulation: completed laundry order -> ledger
+  // Trigger simulation: completed laundry order -> ledger (simulation fallback only)
   if (status === "collected" && oldOrder.status !== "collected") {
     await postLaundryOrderToLedger(updatedOrder);
   } else if (status !== "collected" && oldOrder.status === "collected") {
-    // Delete corresponding transaction if downgraded from collected
+    // Delete corresponding transaction if downgraded from collected (simulation fallback only)
     const transactions = getStorage<any[]>("iroko_transactions", []);
     const tx = transactions.find(t => t.source === "order" && t.source_ref_id === id);
     if (tx) {
@@ -951,7 +1166,7 @@ export async function updateLaundryOrderStatus(id: string, status: "received" | 
 
 async function postLaundryOrderToLedger(order: any) {
   const categories = await getCategories(BU_PRESS_ID);
-  let revenueCat = categories.find(c => c.name === "Laundry Services Revenue" && c.type === "income");
+  let revenueCat = categories.find((c: any) => c.name === "Laundry Services Revenue" && c.type === "income");
   if (!revenueCat) {
     revenueCat = { id: "f3333333-3333-3333-3333-333333333331" };
   }
